@@ -5,4 +5,4 @@ data.dat : a.out
 a.out : cuerda.c
 	cc cuerda.c -lm
 clean :  
-	rm  data.dat a.out
+	rm  *.dat a.out Grafica.png

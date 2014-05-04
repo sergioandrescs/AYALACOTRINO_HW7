@@ -1,111 +1,106 @@
+//
+//  cuerda.c
+//  
+//
+//  Created on 4/29/14.
+//
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-/*Codigo creado para resolver la ecuacion de onda.
-Se toma como condicion inicial una curva gaussiana, con puntos fijos en los extremos (0.0 y 1.0)*/
+#include <string.h>
 
-int main (){
-  
-    int i, j, k;
-    int n_points, tiempo;
-    float dx, dt, c, r, rho, T;
-    float *x, *old, *new, *current;
-    FILE *in;
+void copy(float *donde, float *loque, int n);
 
-    /*Se inicializa la lista de datos*/
-  
-    in = fopen("data.txt","w");
-    x = malloc(n_points*sizeof(float));
-    old = malloc(n_points*sizeof(float));
-    new = malloc(n_points*sizeof(float));
-    current = malloc(n_points*sizeof(float));
+int main(){
 
-    n_points = 100;
-  
-    for (i=0;i<n_points+1;i++){
+    /* inicializo las variables a usar*/
+    int n=1000;
+    float *x=malloc(n*sizeof(float));
+    float *uinicial=malloc(n*sizeof(float));
+    float *ufuturo=malloc(n*sizeof(float));
+    float *upasado=malloc(n*sizeof(float));
+    float *upresente=malloc(n*sizeof(float));
+    int i,j;
+    float paso, rho, T, c, L;
+    FILE *output;
+    FILE *out;
+    
+    /*creo archivos los cuales van a guardar los datos para la animacion*/
+    char filename1[20]="datos_cuerda.txt";
+    output=fopen(filename1,"a");
+    
+    char filename[20]="datos_iniciales.txt";
+    out=fopen(filename,"a");
+    
+    /*lleno las listas con los datos iniciales para tener la grafica de estos, para esto los guardo en un archivo aparte*/
+    
+    for(i=0;i<n;i++){
+        paso = 1.0/n;
+        x[i]=i*paso;
         
-        x[i]=i/(n_points);
-    
-    }
- 
-    /*Se crean los diferenciales que determinaran la solucion.*/
-
-    dx = x[1]-x[0];
-    dt = 0.0005;
-    T = 0.01;
-    rho = 40.0;
-    c = sqrt(T/rho);
-    tiempo = 2000;
-    r = c*(dt/dx);
-
-    /*Se crea el estado inicial*/
-
-    current[0] = 0.0;
-    current[n_points-1] = 0.0;
-
-    new[0] = 0.0;
-    new[n_points-1] = 0.0;
-
-    for (i=1;i<n_points-1;i++){
-    
-      if(i<=(float)(n_points*0.8)){
-          current[i] = 1.25*x[i];
-      }
-      else{
-          current[i] = 5.0-(5.0*x[i]);
-      }
-    }
-    
-    /*Se imprimen los puntos en x.*/
-
-    for(i=0;i<n_points;i++){
-        fprintf(in,"%f\t", 100.0*x[i]);
-        if(i == n_points-1){
-            fprintf(in,"\n");
-        }
-    }
-
-    /*Se imprime el estado inicial.*/
-
-    for(i=0;i<n_points;i++){
-        fprintf(in,"%f\t", current[i]);
-        if(i == n_points-1){
-            fprintf(in,"\n");
-        }
-    }
-
-    /*Se crea un loop que realice la solucion. Los datos seran enviados a un archivo llamada data.dat.*/
-
-    for(i=0;i<tiempo;i++){
-        if(i==0){
-            for(j=1;j<n_points-1;j++){
-                new[j] = current[j] + (pow(r,2)/2.0) * (current[j+1]-2.0*current[j]+current[j-1]);
-            }
-            for(k=0;k<n_points;k++){
-                fprintf(in,"%f\t", new[k]);
-                if(k == n_points-1){
-                    fprintf(in,"\n");
-                }
-                old[k] = current[k];
-                current[k] = new[k];
-            }
+        if(i<=n*0.8){
+            uinicial[i]=1.25*x[i];
         }
         else{
-            for(j=1;j<n_points;j++){
-                new[j] = (2.0*(1.0-pow(r,2)))*current[j] - old[j] + pow(r,2)*(current[j+1] + current[j-1]);
-            }
-            for(k=0;k<n_points;k++){
-                fprintf(in,"%f\t", new[k]);
-                if(k == n_points-1){
-                    fprintf(in,"\n");
-                }
-                old[k] = current[k];
-                current[k] = new[k];
-            }
+            uinicial[i]=5.0-(5.0*x[i]);
         }
+        
+        fprintf(out, "%f %f\n", x[i], uinicial[i]);
+        
+    }
+    
+    /*para encontrar las iteraciones con condiciones iniciales*/
+    float delta_x = 1.0/n;
+    float delta_t = 0.0005;
+    
+    rho = 40.0;
+    T = 0.01;
+    c = sqrt(T/rho);
+    
+    float r=c*delta_t/delta_x;
+    
+    uinicial[0]=0.0;
+    uinicial[n-1]=0.0;
+    
+    ufuturo[0]=0.0;
+    ufuturo[n-1]=0.0;
+    
+    printf("%f %f %f %f\n", delta_x, delta_t,c,r);
+    
+    for(i=1;i<n-1;i++){
+        ufuturo[i] = uinicial[i] + (pow(r,2)/2.0) * (uinicial[i+1] - 2.0 * uinicial[i] + uinicial[i-1]);
+    }
+    
+    /*creo variables nuevas para guardar el valor anterior*/
+    copy(upasado, uinicial, n);
+    copy(upresente, ufuturo, n);
+        
+    /*siguientes iteraciones*/
+    int n_time = 1000;
+    
+    for(j=0;j<n_time;j++){
+        for(i=0;i<n;i++){
+            ufuturo[i] = (2.0*(1.0-pow(r,2)))*upresente[i] - upasado[i] + (pow(r,2))*(upresente[i+1] +  upresente[i-1]);
+            fprintf(output, "%f ", upresente[i]);
+        }
+        fprintf(output,"\n");
+        copy(upasado, upresente, n);
+        copy(upresente, ufuturo, n);
     }
 
-    fclose(in);
 
+    fclose(output);
+    fclose(out);
+   
     return 0;
 }
+
+void copy(float *donde, float *loque, int n){
+    int i;
+    for(i=0;i<n;i++){
+        donde[i] = loque[i];
+    }
+}
+
