@@ -23,15 +23,15 @@ int main(){
     float *upasado=malloc(n*sizeof(float));
     float *upresente=malloc(n*sizeof(float));
     int i,j;
-    float paso, rho, T, c, L;
+    float paso, rho, T, c;
     FILE *output;
     FILE *out;
     
     /*creo archivos los cuales van a guardar los datos para la animacion*/
-    char filename1[20]="datos_cuerda.txt";
+    char filename1[20]="datos_cuerda.dat";
     output=fopen(filename1,"a");
     
-    char filename[20]="datos_iniciales.txt";
+    char filename[20]="datos_iniciales.dat";
     out=fopen(filename,"a");
     
     /*lleno las listas con los datos iniciales para tener la grafica de estos, para esto los guardo en un archivo aparte*/
