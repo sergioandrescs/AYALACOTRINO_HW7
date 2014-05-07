@@ -19,25 +19,25 @@ savefig("Grafica")
 #procedimiento para la animacion
 n = 1000
 figura = plt.figure()
-ejes = plt.axes(xlim=(0, 1), ylim=(-1 , 1))
+ejes = plt.axes(xlim=(0, 100), ylim=(-1 , 1))
 line, = ejes.plot([], [], lw=4, c='red')
 title("$Animacion$ $de$ $cuerda$ $vibrando$")
 
 #importo los datos para la animacion
 data = loadtxt("datos_cuerda.dat")
+x1 = linspace(0,100,n)
 
 def init():
     line.set_data([], [])
     return line,
 
 def animate(i):
-    x1 = linspace(0, 1, n)
-    y = data[i,:]
+    y = data[i]
     line.set_data(x1, y)
     return line,
 
 
-animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=6000, interval=1)
+animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=1000, interval=1)
 
 plt.grid()
 plt.show()

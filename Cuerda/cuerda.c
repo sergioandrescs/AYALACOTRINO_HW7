@@ -58,7 +58,7 @@ int main(){
     
     /*para encontrar las iteraciones con condiciones iniciales*/
     float delta_x = L/n;
-    float delta_t = 0.0005;
+    float delta_t = 0.00158;
     
     float r=c*delta_t/delta_x;
     
