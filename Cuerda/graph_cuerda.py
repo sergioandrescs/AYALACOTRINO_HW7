@@ -7,7 +7,7 @@ from matplotlib import animation
 #http://jakevdp.github.io/
 
 #importo los datos iniciales para saber si comienzo bien
-inicial = loadtxt("datos_iniciales.txt")
+inicial = loadtxt("datos_iniciales.dat")
 x = inicial[:,0]
 uinicial = inicial[:,1]
 
