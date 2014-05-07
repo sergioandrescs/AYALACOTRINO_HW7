@@ -1,6 +1,6 @@
-graph_onda.py : data.dat
+all : datos_cuerda.dat
 	python graph_cuerda.py
-data.dat : a.out
+datos_cuerda.dat : a.out
 	./a.out
 a.out : cuerda.c
 	cc cuerda.c -lm

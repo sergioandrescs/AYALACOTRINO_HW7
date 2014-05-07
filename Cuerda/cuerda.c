@@ -23,7 +23,7 @@ int main(){
     float *upasado=malloc(n*sizeof(float));
     float *upresente=malloc(n*sizeof(float));
     int i,j;
-    float paso, rho, T, c;
+    float paso, rho, T, c, L;
     FILE *output;
     FILE *out;
     
@@ -35,6 +35,11 @@ int main(){
     out=fopen(filename,"a");
     
     /*lleno las listas con los datos iniciales para tener la grafica de estos, para esto los guardo en un archivo aparte*/
+    
+    rho = 40.0;
+    T = 0.01;
+    c = sqrt(T/rho);
+    L = 100.0;
     
     for(i=0;i<n;i++){
         paso = 1.0/n;
@@ -55,10 +60,6 @@ int main(){
     float delta_x = 1.0/n;
     float delta_t = 0.0005;
     
-    rho = 40.0;
-    T = 0.01;
-    c = sqrt(T/rho);
-    
     float r=c*delta_t/delta_x;
     
     uinicial[0]=0.0;
@@ -69,6 +70,7 @@ int main(){
     
     printf("%f %f %f %f\n", delta_x, delta_t,c,r);
     
+    float v;
     for(i=1;i<n-1;i++){
         ufuturo[i] = uinicial[i] + (pow(r,2)/2.0) * (uinicial[i+1] - 2.0 * uinicial[i] + uinicial[i-1]);
     }
@@ -83,7 +85,7 @@ int main(){
     for(j=0;j<n_time;j++){
         for(i=0;i<n;i++){
             ufuturo[i] = (2.0*(1.0-pow(r,2)))*upresente[i] - upasado[i] + (pow(r,2))*(upresente[i+1] +  upresente[i-1]);
-            fprintf(output, "%f ", upresente[i]);
+            fprintf(output, "%f ", ufuturo[i]);
         }
         fprintf(output,"\n");
         copy(upasado, upresente, n);

@@ -36,7 +36,7 @@ def animate(i):
     return line,
 
 
-animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=2000, interval=20)
+animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=10000, interval=20)
 
 plt.grid()
 plt.show()
