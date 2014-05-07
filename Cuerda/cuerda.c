@@ -31,7 +31,7 @@ int main(){
     char filename1[20]="datos_cuerda.dat";
     output=fopen(filename1,"w");
     
-    char filename[20]="datos_iniciales.txt";
+    char filename[20]="datos_iniciales.dat";
     out=fopen(filename,"w");
     
     /*lleno las listas con los datos iniciales para tener la grafica de estos, para esto los guardo en un archivo aparte*/
