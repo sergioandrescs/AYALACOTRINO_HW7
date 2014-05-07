@@ -29,27 +29,27 @@ int main(){
     
     /*creo archivos los cuales van a guardar los datos para la animacion*/
     char filename1[20]="datos_cuerda.dat";
-    output=fopen(filename1,"a");
+    output=fopen(filename1,"w");
     
-    char filename[20]="datos_iniciales.dat";
-    out=fopen(filename,"a");
+    char filename[20]="datos_iniciales.txt";
+    out=fopen(filename,"w");
     
     /*lleno las listas con los datos iniciales para tener la grafica de estos, para esto los guardo en un archivo aparte*/
     
     rho = 40.0;
     T = 0.01;
-    c = sqrt(T/rho);
+    c = sqrt(rho/T);
     L = 100.0;
     
     for(i=0;i<n;i++){
-        paso = 1.0/n;
+        paso = L/n;
         x[i]=i*paso;
         
         if(i<=n*0.8){
-            uinicial[i]=1.25*x[i];
+            uinicial[i]=1.25*x[i]/L;
         }
         else{
-            uinicial[i]=5.0-(5.0*x[i]);
+            uinicial[i]=5.0-(5.0*x[i]/L);
         }
         
         fprintf(out, "%f %f\n", x[i], uinicial[i]);
@@ -57,7 +57,7 @@ int main(){
     }
     
     /*para encontrar las iteraciones con condiciones iniciales*/
-    float delta_x = 1.0/n;
+    float delta_x = L/n;
     float delta_t = 0.0005;
     
     float r=c*delta_t/delta_x;
