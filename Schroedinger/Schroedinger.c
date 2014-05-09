@@ -86,11 +86,11 @@ for(i=0;i<n_points;i++){
  /*Se crea un loop que realice la solucion.*/
  for (j=0;j<tiempo;j++){
    for (i=1;i<n_points-1;i++){
-     rnew[i] = rcurrent[i]- dt*(icurrent[i+1]+icurrent[i-1] - 2*icurrent[i]);
+     rnew[i] = rcurrent[i]- 2*(alpha*(icurrent[i+1]+icurrent[i-1]) - 2*(alpha+potencial[i]*dt)*icurrent[i]);
      rho[i] = (rcurrent[i]*rnew[i]) + (pow(icurrent[i],2));
    }
    for (i=1;i<n_points-1;i++){
-     inew[i] =  icurrent[i] + dt*(rcurrent[i+1]+rcurrent[i-1] - 2*rcurrent[i]);
+     inew[i] =  icurrent[i] + 2*(alpha*(rcurrent[i+1]+rcurrent[i-1]) - 2*(alpha - potencial[i]*dt)*rcurrent[i]);
    }
    /*Se imprimen los datos.*/
    for(i=0;i<n_points;i++){
