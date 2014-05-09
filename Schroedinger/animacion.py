@@ -14,6 +14,7 @@ title("$Animacion$ $de$ $la$ $ecuacion$ $de$ $Schroedinger$")
 data = loadtxt("proba.dat")
 n1 = shape(data)
 n = n1[1]
+nn = n1[0]
 
 def init():
     line.set_data([], [])
@@ -21,13 +22,13 @@ def init():
 
 def animate(i):
     global data
-    x1 = linspace(-50, 50, n)
+    x = linspace(-50, 50, n)
     y = data[i,:]
-    line.set_data(x1, y)
+    line.set_data(x, y)
     return line,
 
 
-animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=10000, interval=20)
+animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=nn, interval=20)
 
 plt.grid()
 plt.show()

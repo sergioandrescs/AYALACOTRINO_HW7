@@ -1,0 +1,34 @@
+from pylab import *
+from numpy import *
+from matplotlib import *
+from matplotlib import animation
+#from JSAnimation import HTMLWriter
+
+#procedimiento para la animacion
+figura = plt.figure()
+ejes = plt.axes(xlim=(-50, 50), ylim=(0 , 5))
+line, = ejes.plot([], [], lw=3, c='red')
+title("$Animacion$ $de$ $la$ $ecuacion$ $de$ $Schroedinger$")
+
+#importo los datos para la animacion
+data = loadtxt("proba.dat")
+n1 = shape(data)
+n = n1[1]
+nn = n1[0]
+
+def init():
+    line.set_data([], [])
+    return line,
+
+def animate(i):
+    global data
+    x1 = linspace(-50, 50, n)
+    y = data[i,:]
+    line.set_data(x1, y)
+    return line,
+
+
+animacion = animation.FuncAnimation(figura, animate, init_func=init, frames=10000, interval=20)
+
+plt.grid()
+plt.show()
